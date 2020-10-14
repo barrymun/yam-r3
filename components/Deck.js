@@ -22,7 +22,7 @@ const DEFAULT_PLAYER_DECK = [
   CARD_DEFEND,
 ];
 
-class Player {
+class Deck {
   playerDeck = [
     ...DEFAULT_PLAYER_DECK
   ];
@@ -156,5 +156,5 @@ class Player {
 }
 
 module.exports = {
-  Player,
+  Deck,
 };
