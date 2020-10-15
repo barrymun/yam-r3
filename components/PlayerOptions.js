@@ -1,25 +1,16 @@
-const readline = require('readline');
+const {getUserInput} = require("../utils");
 
 class PlayerOptions {
-  play = 1;
+  playCard = 1;
   quit = 2;
 
   async getOptions() {
     const query = "" +
       "select:\n" +
-      `[${this.play}] choose a card\n` +
+      `[${this.playCard}] choose a card\n` +
       `[${this.quit}] quit\n`
     ;
-
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-
-    return new Promise(resolve => rl.question(query, ans => {
-      rl.close();
-      resolve(ans);
-    }))
+    return getUserInput(query);
   }
 }
 

@@ -1,3 +1,4 @@
+const {getUserInput} = require("../utils");
 const CARD_SIZE = 5;
 const STANDARD_DRAW_AMOUNT = 5;
 const MAX_CARDS_IN_HAND = 10;
@@ -66,10 +67,6 @@ class Player {
   }
 
   constructor() {
-    // this.play();
-  }
-
-  play() {
     // set the in play cards
     this.setDrawPile(this.shuffle(this.getDeck()));
   }
@@ -97,7 +94,9 @@ class Player {
         if (i === 0 || i === CARD_SIZE - 1) {
           lines[i] += '========== ';
         } else if (i === 1) {
-          lines[i] += `|   ${hand[j].display}  | `;
+          lines[i] += `|  ${j}     | `;
+        } else if (i === 2) {
+          lines[i] += `|  ${hand[j].display}   | `;
         } else {
           lines[i] += `|        | `;
         }
@@ -164,6 +163,20 @@ class Player {
     let dp = this.getDiscardPile();
     this.setDiscardPile([]);
     this.setDrawPile(this.shuffle(dp));
+  }
+
+  async selectCardToPlay() {
+    let r = "select:\n";
+    this.getHand().forEach((card, index) => {
+      r += `[${index}] ${card.display}\n`;
+    });
+    return getUserInput(r);
+  }
+
+  async playCard(index) {
+    let card = this.getHand()[index];
+    let r = "select an enemy: ";
+    return await getUserInput(r);
   }
 
 }

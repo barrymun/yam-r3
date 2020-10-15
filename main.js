@@ -1,6 +1,6 @@
 const {PlayerOptions} = require("./components/PlayerOptions");
 const {Player} = require("./components/Player");
-const {PauseMenu} = require("./components/PauseMenu");
+const {Opposition} = require("./components/Opposition");
 
 // let stdin = process.stdin;
 
@@ -19,21 +19,28 @@ const {PauseMenu} = require("./components/PauseMenu");
 
 
 async function Main() {
+
   console.clear();
 
+  let stage = 0;
+
   let pOpts = new PlayerOptions();
-  let pMenu = new PauseMenu();
+  // let pMenu = new PauseMenu();
   let player = new Player();
-  player.play();
+  let opp = new Opposition();
 
   while (true) {
     console.clear();
+    opp.printScene();
     player.beginTurn();
-    let choice = await pOpts.getOptions();
 
-    switch (parseInt(choice)) {
-      case pOpts.play:
-        console.log('PLAY');
+    let options = parseInt(await pOpts.getOptions());
+    switch (options) {
+      case pOpts.playCard:
+        let cardIndex = parseInt(await player.selectCardToPlay());
+        console.log({cardIndex})
+        let card = await player.playCard(cardIndex);
+        console.log({card})
         break;
       case pOpts.quit:
         process.exit();
