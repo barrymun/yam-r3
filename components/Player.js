@@ -24,6 +24,26 @@ const DEFAULT_PLAYER_DECK = [
 ];
 
 class Player {
+  health = 70;
+
+  getHealth() {
+    return this.health;
+  }
+
+  setHealth(health) {
+    this.health = health;
+  }
+
+  block = 0;
+
+  getBlock() {
+    return this.block;
+  }
+
+  setBlock(block) {
+    this.block = block;
+  }
+
   deck = [
     ...DEFAULT_PLAYER_DECK
   ];
@@ -78,10 +98,12 @@ class Player {
 
   endTurn() {
     this.discardHand();
+    this.setBlock(0);
   }
 
   printScene() {
     this.renderHand();
+    this.renderPlayer();
   }
 
   renderHand() {
@@ -103,6 +125,16 @@ class Player {
       }
     }
     lines.forEach(line => console.log(line));
+  }
+
+  renderPlayer() {
+    let s = "\n" +
+      "================\n"+
+      `| health: ${this.getHealth()} |\n`+
+      `| block: ${this.getBlock()} |\n`+
+      "================\n"
+    ;
+    console.log(s);
   }
 
   drawCards() {
