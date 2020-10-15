@@ -22,27 +22,27 @@ const DEFAULT_PLAYER_DECK = [
   CARD_DEFEND,
 ];
 
-class Deck {
-  playerDeck = [
+class Player {
+  deck = [
     ...DEFAULT_PLAYER_DECK
   ];
 
-  getPlayerDeck() {
-    return this.playerDeck;
+  getDeck() {
+    return this.deck;
   }
 
-  setPlayerDeck(playerHand) {
-    this.playerDeck = playerHand;
+  setDeck(playerHand) {
+    this.deck = playerHand;
   }
 
-  playerHand = [];
+  hand = [];
 
-  getPlayerHand() {
-    return this.playerHand;
+  getHand() {
+    return this.hand;
   }
 
-  setPlayerHand(playerHand) {
-    this.playerHand = playerHand;
+  setHand(playerHand) {
+    this.hand = playerHand;
   }
 
   drawPile = [];
@@ -58,30 +58,37 @@ class Deck {
   discardPile = [];
 
   getDiscardPile() {
-    return this.drawPile;
+    return this.discardPile;
   }
 
-  setDiscardPile(drawPile) {
-    this.drawPile = drawPile;
+  setDiscardPile(discardPile) {
+    this.discardPile = discardPile;
   }
 
   constructor() {
-    this.play();
+    // this.play();
   }
 
   play() {
     // set the in play cards
-    this.setDrawPile(this.shuffle(this.getPlayerDeck()));
+    this.setDrawPile(this.shuffle(this.getDeck()));
+  }
+
+  beginTurn() {
+    this.drawCards();
     this.printScene();
   }
 
-  printScene() {
-    this.drawCards();
-    this.renderPlayerHand();
+  endTurn() {
+    this.discardHand();
   }
 
-  renderPlayerHand() {
-    let hand = this.getPlayerHand();
+  printScene() {
+    this.renderHand();
+  }
+
+  renderHand() {
+    let hand = this.getHand();
     if (hand.length === 0) return;
     let lines = [];
     for (let i = 0; i < CARD_SIZE; i++) {
@@ -96,12 +103,12 @@ class Deck {
         }
       }
     }
-    lines.forEach(line => console.log(line))
+    lines.forEach(line => console.log(line));
   }
 
   drawCards() {
     let drawCount = 0;
-    while (drawCount < STANDARD_DRAW_AMOUNT && this.getPlayerHand().length <= MAX_CARDS_IN_HAND) {
+    while (drawCount < STANDARD_DRAW_AMOUNT && this.getHand().length <= MAX_CARDS_IN_HAND) {
       // check for cards in the draw pile
       if (this.getDrawPile().length <= 0) {
         // move the discard pile to the draw pile
@@ -117,9 +124,15 @@ class Deck {
       // set the new player hand
       let [drawCard, ...remainingDrawCards] = this.getDrawPile();
       this.setDrawPile(remainingDrawCards);
-      this.setPlayerHand([...this.getPlayerHand(), drawCard]);
+      this.setHand([...this.getHand(), drawCard]);
       drawCount += 1;
     }
+  }
+
+  discardHand() {
+    let forDiscard = this.getHand();
+    this.setHand([]);
+    this.setDiscardPile([...this.getDiscardPile(), ...forDiscard]);
   }
 
   /**
@@ -156,5 +169,5 @@ class Deck {
 }
 
 module.exports = {
-  Deck,
+  Player,
 };

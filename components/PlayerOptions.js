@@ -5,8 +5,6 @@ class PlayerOptions {
   quit = 2;
 
   async getOptions() {
-    console.clear();
-
     const query = "" +
       "select:\n" +
       `[${this.play}] choose a card\n` +
