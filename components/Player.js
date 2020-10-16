@@ -113,7 +113,6 @@ class Player {
 
   printScene() {
     this.renderHand();
-    this.renderPlayer();
   }
 
   renderHand() {

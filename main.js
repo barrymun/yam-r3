@@ -30,10 +30,8 @@ async function Main() {
   while (true) {
     console.clear();
     opposition.nextTurnSetup();
-    console.log(opposition.getNextTurnMoveset())
     opposition.printScene();
     player.renderPlayer();
-    console.log({stage: opposition.getStage()})
 
     // the player can quit, fight or end their turn
     let options = parseInt(await gameOptions.getOptions());

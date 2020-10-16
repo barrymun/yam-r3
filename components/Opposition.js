@@ -12,11 +12,11 @@ const BANDIT = {
   moveset: [
     {
       type: MOVESET_TYPE_DAMAGE,
-      amount: 5,
+      amount: 6,
     },
     {
       type: MOVESET_TYPE_BLOCK,
-      amount: 2,
+      amount: 4,
     },
   ],
 };
@@ -74,13 +74,13 @@ class Opposition {
         if (i === 0 || i === ENEMY_SIZE - 1) {
           lines[i] += '========== ';
         } else if (i === 1) {
-          lines[i] += `|  ${j}     | `;
+          lines[i] += `|  index: ${j}  | `;
         } else if (i === 2) {
-          lines[i] += `|  health: ${enemies[j].health}    | `;
+          lines[i] += `|  health: ${enemies[j].health}  | `;
         } else if (i === 3) {
-          lines[i] += `|  block: ${enemies[j].block}    | `;
+          lines[i] += `|  block: ${enemies[j].block}  | `;
         } else if (i === 4) {
-          lines[i] += `|  ${MOVESET_DESCRIPTION[this.getNextTurnMoveset()[j].type.toString()]} for ${this.getNextTurnMoveset()[j].amount}    | `;
+          lines[i] += `|  ${MOVESET_DESCRIPTION[this.getNextTurnMoveset()[j].type.toString()]} for ${this.getNextTurnMoveset()[j].amount} | `;
         } else {
           lines[i] += `|        | `;
         }
