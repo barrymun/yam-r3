@@ -33,6 +33,7 @@ async function Main() {
     console.log(opposition.getNextTurnMoveset())
     opposition.printScene();
     player.renderPlayer();
+    console.log({stage: opposition.getStage()})
 
     // the player can quit, fight or end their turn
     let options = parseInt(await gameOptions.getOptions());
@@ -52,7 +53,7 @@ async function Main() {
             break;
           case player.PLAY_CARD:
             let cardIndex = parseInt(await player.selectCardToPlay());
-            await player.playCard(cardIndex);
+            await player.playCard(cardIndex, opposition);
             break;
           default:
             break;

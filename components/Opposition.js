@@ -156,6 +156,27 @@ class Opposition {
   endTurn() {
   }
 
+  receiveDamage(enemyIndex, damage) {
+    let enemy = this.getEnemies()[enemyIndex];
+
+    if (damage <= enemy.block) {
+      enemy.block -= damage;
+    } else {
+      let healthDamage = damage - enemy.block;
+      // no block remaining
+      enemy.block = 0;
+      enemy.health -= healthDamage;
+    }
+
+    this.setEnemies(
+      [
+        ...this.getEnemies().slice(0, enemyIndex),
+        enemy.health > 0 ? enemy : null,
+        ...this.getEnemies().slice(enemyIndex + 1),
+      ].filter(o => o != null)  // filter used to remove null enemies (enemies that have health <= 0)
+    );
+  }
+
 }
 
 module.exports = {

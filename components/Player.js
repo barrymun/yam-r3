@@ -139,9 +139,9 @@ class Player {
 
   renderPlayer() {
     let s = "\n" +
-      "================\n"+
-      `| health: ${this.getHealth()} |\n`+
-      `| block: ${this.getBlock()} |\n`+
+      "================\n" +
+      `| health: ${this.getHealth()} |\n` +
+      `| block: ${this.getBlock()} |\n` +
       "================\n"
     ;
     console.log(s);
@@ -225,13 +225,29 @@ class Player {
     return getUserInput(r);
   }
 
-  async playCard(index) {
+  async playCard(index, opposition) {
     let card = this.getHand()[index];
     // TODO: handle invalid card index
     switch (card.type) {
       case CARD_TYPE_ATTACK:
-        let r = "select an enemy: ";
-        await getUserInput(r);
+        let enemy = null;
+        let enemyToAttack = null;
+        // attempt to retrieve a target
+        while (true) {
+          enemyToAttack = parseInt(await getUserInput("select an enemy: "));
+          try {
+            enemy = opposition.getEnemies()[enemyToAttack]
+          } catch (e) {
+          }
+          // keep looping until a valid enemy has been selected
+          if (enemy == null) {
+            console.log("please select a valid enemy");
+          } else {
+            break;
+          }
+        }
+        // target has been selected
+        opposition.receiveDamage(enemyToAttack, card.amount);
         break;
       case CARD_TYPE_DEFEND:
         this.setBlock(this.getBlock() + card.amount);
