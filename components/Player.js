@@ -270,6 +270,7 @@ class Player {
       case CARD_TYPE_ATTACK:
         if (opposition.getEnemies().length <= 0) {
           console.log("no enemies to attack");
+          return false;
         }
 
         let enemy = null;
