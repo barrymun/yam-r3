@@ -253,7 +253,7 @@ class Player {
   }
 
   async playCard(index, opposition) {
-
+    // check that the card can be played
     let card = this.getHand()[index];
     if (card == null) {
       console.log("invalid choice");
@@ -297,6 +297,13 @@ class Player {
 
     // remove the cost to play the card
     this.setEnergy(this.getEnergy() - card.cost);
+
+    // send the card to the discard pile
+    this.setHand([
+      ...this.getHand().slice(0, index),
+      ...this.getHand().slice(index + 1),
+    ]);
+    this.setDiscardPile([...this.getDiscardPile(), card]);
     return true;
   }
 

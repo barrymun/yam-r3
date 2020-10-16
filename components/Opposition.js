@@ -97,7 +97,7 @@ class Opposition {
       this.setNextTurnMoveset([
         ...this.getNextTurnMoveset().slice(0, index),
         move,
-        ...this.getEnemies().slice(index + 1),
+        ...this.getNextTurnMoveset().slice(index + 1),
       ])
     });
   }
