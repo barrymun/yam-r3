@@ -43,22 +43,34 @@ async function Main() {
         // player has chosen to fight
         player.beginTurn();
 
-        // player much choose what to do
-        let choice = parseInt(await player.getOptions());
-        switch (choice) {
-          case player.END_TURN:
-            // do nothing, skip to end of turn code
-            break;
-          case player.PLAY_CARD:
-            let cardIndex = parseInt(await player.selectCardToPlay());
-            await player.playCard(cardIndex, opposition);
-            break;
-          default:
-            break;
+        let isPlayerTurn = true;
+        while (isPlayerTurn) {
+          // player much choose what to do
+          let choice = null;
+          while (choice == null) {
+            choice = parseInt(await player.getOptions());
+            switch (choice) {
+              case player.END_TURN:
+                player.endTurn();
+                isPlayerTurn = false;
+                break;
+              case player.PLAY_CARD:
+                let cardIndex = parseInt(await player.selectCardToPlay());
+                let playedSuccessfully = await player.playCard(cardIndex, opposition);
+                if (!playedSuccessfully) choice = null;  // try again
+                break;
+              default:
+                // invalid choice, set to null and retry
+                choice = null;
+                console.log("please choose a valid card");
+                break;
+            }
+          }
+          console.clear();
+          player.renderHand();
+          player.renderPlayer();
+          player.printEnergyRemaining();
         }
-
-        // end the turn
-        player.endTurn();
         break;
       case gameOptions.END_PLAYER_TURN:
         player.endTurn();

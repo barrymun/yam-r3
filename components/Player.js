@@ -9,12 +9,14 @@ const CARD_ATTACK = {
   display: 'ATK',
   type: CARD_TYPE_ATTACK,
   amount: 6,
+  cost: 1,
 };
 const CARD_DEFEND = {
   id: 1,
   display: 'DEF',
   type: CARD_TYPE_DEFEND,
   amount: 5,
+  cost: 1,
 };
 const DEFAULT_PLAYER_DECK = [
   CARD_ATTACK,
@@ -96,12 +98,33 @@ class Player {
     this.discardPile = discardPile;
   }
 
+  maxEnergy = 3;
+
+  getMaxEnergy() {
+    return this.maxEnergy;
+  }
+
+  setMaxEnergy(maxEnergy) {
+    this.maxEnergy = maxEnergy;
+  }
+
+  energy = 0;
+
+  getEnergy() {
+    return this.energy;
+  }
+
+  setEnergy(energy) {
+    this.energy = energy;
+  }
+
   constructor() {
     // set the in play cards
     this.setDrawPile(this.shuffle(this.getDeck()));
   }
 
   beginTurn() {
+    this.setEnergy(this.getMaxEnergy());
     this.setBlock(0);
     this.drawCards();
     this.printScene();
@@ -113,6 +136,11 @@ class Player {
 
   printScene() {
     this.renderHand();
+    this.printEnergyRemaining();
+  }
+
+  printEnergyRemaining() {
+    console.log(`energy remaining: ${this.getEnergy()}`);
   }
 
   renderHand() {
@@ -225,14 +253,26 @@ class Player {
   }
 
   async playCard(index, opposition) {
+
     let card = this.getHand()[index];
-    // TODO: handle invalid card index
+    if (card == null) {
+      console.log("invalid choice");
+      return false;
+    }
+
+    if (this.getEnergy() < card.cost) {
+      // player cannot play this card
+      console.log("not enough energy!");
+      return false;
+    }
+
     switch (card.type) {
       case CARD_TYPE_ATTACK:
         let enemy = null;
         let enemyToAttack = null;
         // attempt to retrieve a target
         while (true) {
+          opposition.renderEnemies();
           enemyToAttack = parseInt(await getUserInput("select an enemy: "));
           try {
             enemy = opposition.getEnemies()[enemyToAttack]
@@ -254,6 +294,10 @@ class Player {
       default:
         break;
     }
+
+    // remove the cost to play the card
+    this.setEnergy(this.getEnergy() - card.cost);
+    return true;
   }
 
 }
