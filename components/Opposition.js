@@ -128,7 +128,12 @@ class Opposition {
           } else {
             let healthDamage = damage - player.getBlock();
             player.setBlock(0);
-            player.setHealth(player.getHealth() - healthDamage);
+            if (healthDamage < player.getHealth()) {
+              player.setHealth(player.getHealth() - healthDamage);
+            } else {
+              // game will end
+              player.setHealth(0);
+            }
           }
 
           break;

@@ -72,10 +72,16 @@ async function Main() {
     if (opposition.getEnemies().length <= 0) {
       // no enemies left, progress to next stage
       opposition.setStage(opposition.getStage() + 1);
+      // TODO: notification to the player + reward screen
     } else {
       opposition.beginTurn(player);
     }
     opposition.endTurn();
+
+    if (player.getHealth() <= 0) {
+      console.log('GAME OVER');
+      process.exit();
+    }
 
   }
 
