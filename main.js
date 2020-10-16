@@ -1,4 +1,4 @@
-const {PlayerOptions} = require("./components/PlayerOptions");
+const {GameOptions} = require("./components/GameOptions");
 const {Player} = require("./components/Player");
 const {Opposition} = require("./components/Opposition");
 
@@ -24,7 +24,7 @@ async function Main() {
 
   let stage = 0;
 
-  let pOpts = new PlayerOptions();
+  let gameOptions = new GameOptions();
   // let pMenu = new PauseMenu();
   let player = new Player();
   let opp = new Opposition();
@@ -34,18 +34,34 @@ async function Main() {
     opp.printScene();
     player.renderPlayer();
 
-    let options = parseInt(await pOpts.getOptions());
+    // the player can quit, fight or end their turn
+    let options = parseInt(await gameOptions.getOptions());
     switch (options) {
-      case pOpts.quit:
-        process.exit();
+      case gameOptions.QUIT:
+        process.exit();  // end the game
         break;
-      case pOpts.fight:
+      case gameOptions.FIGHT:
+        // player has chosen to fight
         player.beginTurn();
-        let cardIndex = parseInt(await player.selectCardToPlay());
-        await player.playCard(cardIndex);
+
+        // player much choose what to do
+        let choice = parseInt(await player.getOptions());
+        switch (choice) {
+          case player.END_TURN:
+            // do nothing, skip to end of turn code
+            break;
+          case player.PLAY_CARD:
+            let cardIndex = parseInt(await player.selectCardToPlay());
+            await player.playCard(cardIndex);
+            break;
+          default:
+            break;
+        }
+
+        // end the turn
         player.endTurn();
         break;
-      case pOpts.endTurn:
+      case gameOptions.END_PLAYER_TURN:
         player.endTurn();
         break;
       default:

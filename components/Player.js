@@ -30,6 +30,10 @@ const DEFAULT_PLAYER_DECK = [
 ];
 
 class Player {
+  // fight options
+  END_TURN = 0;
+  PLAY_CARD = 1;
+
   health = 70;
 
   getHealth() {
@@ -201,6 +205,16 @@ class Player {
     let dp = this.getDiscardPile();
     this.setDiscardPile([]);
     this.setDrawPile(this.shuffle(dp));
+  }
+
+  async getOptions() {
+    const query = "" +
+      "select:\n" +
+      `[${this.END_TURN}] end turn\n` +
+      `[${this.PLAY_CARD}] play a card\n` +
+      `=> `
+    ;
+    return getUserInput(query);
   }
 
   async selectCardToPlay() {
