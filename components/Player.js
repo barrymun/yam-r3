@@ -268,8 +268,13 @@ class Player {
 
     switch (card.type) {
       case CARD_TYPE_ATTACK:
+        if (opposition.getEnemies().length <= 0) {
+          console.log("no enemies to attack");
+        }
+
         let enemy = null;
         let enemyToAttack = null;
+
         // attempt to retrieve a target
         while (true) {
           opposition.renderEnemies();
@@ -285,6 +290,7 @@ class Player {
             break;
           }
         }
+
         // target has been selected
         opposition.receiveDamage(enemyToAttack, card.amount);
         break;
