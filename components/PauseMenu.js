@@ -9,7 +9,7 @@ class PauseMenu {
     this.isOpen = isOpen;
   }
 
-  constructor(props) {
+  constructor() {
   }
 
   open() {

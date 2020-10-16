@@ -22,16 +22,16 @@ async function Main() {
 
   console.clear();
 
-  let stage = 0;
-
   let gameOptions = new GameOptions();
   // let pMenu = new PauseMenu();
   let player = new Player();
-  let opp = new Opposition();
+  let opposition = new Opposition();
 
   while (true) {
     console.clear();
-    opp.printScene();
+    opposition.nextTurnSetup();
+    console.log(opposition.getNextTurnMoveset())
+    opposition.printScene();
     player.renderPlayer();
 
     // the player can quit, fight or end their turn
@@ -67,8 +67,17 @@ async function Main() {
       default:
         break;
     }
-  }
 
+    // player turn is over once this point is reached
+    if (opposition.getEnemies().length <= 0) {
+      // no enemies left, progress to next stage
+      opposition.setStage(opposition.getStage() + 1);
+    } else {
+      opposition.beginTurn(player);
+    }
+    opposition.endTurn();
+
+  }
 
 }
 
