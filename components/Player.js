@@ -2,13 +2,19 @@ const {getUserInput} = require("../utils");
 const CARD_SIZE = 5;
 const STANDARD_DRAW_AMOUNT = 5;
 const MAX_CARDS_IN_HAND = 10;
+const CARD_TYPE_ATTACK = 1;
+const CARD_TYPE_DEFEND = 2;
 const CARD_ATTACK = {
   id: 0,
   display: 'ATK',
+  type: CARD_TYPE_ATTACK,
+  amount: 6,
 };
 const CARD_DEFEND = {
   id: 1,
   display: 'DEF',
+  type: CARD_TYPE_DEFEND,
+  amount: 5,
 };
 const DEFAULT_PLAYER_DECK = [
   CARD_ATTACK,
@@ -92,13 +98,13 @@ class Player {
   }
 
   beginTurn() {
+    this.setBlock(0);
     this.drawCards();
     this.printScene();
   }
 
   endTurn() {
     this.discardHand();
-    this.setBlock(0);
   }
 
   printScene() {
@@ -207,8 +213,18 @@ class Player {
 
   async playCard(index) {
     let card = this.getHand()[index];
-    let r = "select an enemy: ";
-    return await getUserInput(r);
+    // TODO: handle invalid card index
+    switch (card.type) {
+      case CARD_TYPE_ATTACK:
+        let r = "select an enemy: ";
+        await getUserInput(r);
+        break;
+      case CARD_TYPE_DEFEND:
+        this.setBlock(this.getBlock() + card.amount);
+        break;
+      default:
+        break;
+    }
   }
 
 }

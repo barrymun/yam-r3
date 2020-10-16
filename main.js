@@ -32,24 +32,25 @@ async function Main() {
   while (true) {
     console.clear();
     opp.printScene();
-    player.beginTurn();
+    player.renderPlayer();
 
     let options = parseInt(await pOpts.getOptions());
     switch (options) {
-      case pOpts.playCard:
-        let cardIndex = parseInt(await player.selectCardToPlay());
-        console.log({cardIndex})
-        let card = await player.playCard(cardIndex);
-        console.log({card})
-        break;
       case pOpts.quit:
         process.exit();
+        break;
+      case pOpts.fight:
+        player.beginTurn();
+        let cardIndex = parseInt(await player.selectCardToPlay());
+        await player.playCard(cardIndex);
+        player.endTurn();
+        break;
+      case pOpts.endTurn:
+        player.endTurn();
         break;
       default:
         break;
     }
-
-    player.endTurn();
   }
 
 
