@@ -140,7 +140,9 @@ class Player {
   }
 
   printEnergyRemaining() {
+    console.log('===ENERGY===');
     console.log(`energy remaining: ${this.getEnergy()}`);
+    console.log('============');
   }
 
   renderHand() {
@@ -161,15 +163,16 @@ class Player {
         }
       }
     }
+    lines = ['===CARDS===', ...lines];
     lines.forEach(line => console.log(line));
   }
 
   renderPlayer() {
-    let s = "\n" +
-      "================\n" +
+    let s = "" +
+      "===PLAYER===\n" +
       `| health: ${this.getHealth()} |\n` +
       `| block: ${this.getBlock()} |\n` +
-      "================\n"
+      "================"
     ;
     console.log(s);
   }
@@ -245,14 +248,19 @@ class Player {
   }
 
   async selectCardToPlay() {
-    let r = "select:\n";
+    let r = "select:\n[-1] back, ";
     this.getHand().forEach((card, index) => {
-      r += `[${index}] ${card.display}\n`;
+      r += `[${index}] ${card.display}${index !== this.getHand().length - 1 ? ', ' : '\n=> '}`;
     });
     return getUserInput(r);
   }
 
   async playCard(index, opposition) {
+    if (index === -1) {
+      // special case to handle operation cancel
+      return false;
+    }
+
     // check that the card can be played
     let card = this.getHand()[index];
     if (card == null) {
@@ -279,7 +287,13 @@ class Player {
         // attempt to retrieve a target
         while (true) {
           opposition.renderEnemies();
-          enemyToAttack = parseInt(await getUserInput("select an enemy: "));
+          enemyToAttack = parseInt(await getUserInput("select an enemy ([-1] to go back): "));
+
+          if (enemyToAttack === -1) {
+            // back
+            break;
+          }
+
           try {
             enemy = opposition.getEnemies()[enemyToAttack]
           } catch (e) {
@@ -290,6 +304,11 @@ class Player {
           } else {
             break;
           }
+        }
+
+        if (enemyToAttack === -1) {
+          // back
+          return false;
         }
 
         // target has been selected

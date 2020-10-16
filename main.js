@@ -67,6 +67,7 @@ async function Main() {
             }
           }
           console.clear();
+          opposition.renderEnemies();
           player.renderHand();
           player.renderPlayer();
           player.printEnergyRemaining();

@@ -23,7 +23,7 @@ const BANDIT = {
 const STARTING_ENEMIES = [
   BANDIT,
 ];
-const ENEMY_SIZE = 7;
+const ENEMY_SIZE = 6;
 
 class Opposition {
   stage = 0;
@@ -86,6 +86,7 @@ class Opposition {
         }
       }
     }
+    lines[0] = '===ENEMIES===';
     lines.forEach(line => console.log(line));
   }
 
